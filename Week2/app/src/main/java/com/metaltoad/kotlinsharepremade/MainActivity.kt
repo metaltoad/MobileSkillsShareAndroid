@@ -1,10 +1,10 @@
 package com.metaltoad.kotlinsharepremade
 
-import android.support.v7.app.AppCompatActivity
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,15 +12,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val helloWorldTextView = findViewById<TextView>(R.id.hello_world_text_view)
+        val helloWorldTextView = findViewById<TextView>(R.id.helloWorldTextView)
         helloWorldTextView.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Hello World Alert")
-            builder.setMessage("You have reached the hello world alert")
-            builder.setPositiveButton("Ok") {dialogInterface, i ->
-                Toast.makeText(this, "You have clicked Ok!", Toast.LENGTH_SHORT).show()
-            }
-            builder.create().show()
+            val intent = Intent(this, SecondActivity::class.java)
+            startActivityForResult(intent, 100)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == Activity.RESULT_OK) {
+            val responseTextView = findViewById<TextView>(R.id.responseTextView)
+            val number = data?.getIntExtra("random", 0)
+            val string = "Your number was " + number
+            responseTextView.setText(string)
         }
     }
 }
